@@ -1,4 +1,4 @@
-package research.bike;
+package research.emergency;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
@@ -9,23 +9,27 @@ import org.apache.beam.sdk.transforms.SimpleFunction;
 import org.apache.beam.sdk.values.KV;
 import org.bson.Document;
 import org.apache.beam.sdk.io.mongodb.MongoDbIO;
+import research.WriteToText;
 
-public class BikeRunner {
+import java.util.HashMap;
+import java.util.Map;
+
+public class EmergencyRunner {
 
     public static void main(String[] args) {
-        BikeRunnerOptions options = PipelineOptionsFactory.fromArgs(args).withoutStrictParsing().as(BikeRunnerOptions.class);
+        EmergencyRunnerOptions options = PipelineOptionsFactory.fromArgs(args).withoutStrictParsing().as(EmergencyRunnerOptions.class);
         runRunner(options);
     }
 
-    static void runRunner(BikeRunnerOptions options) {
+    static void runRunner(EmergencyRunnerOptions options) {
         Pipeline pipeline = Pipeline.create(options);
 
         pipeline
             .apply("Read Input File", TextIO.read().from(options.getInputFile()))
-            .apply("Parse Input", ParDo.of(new ParseBikeEventFn()))
-            .apply("Extract Total Crossing", new ExtractAndSumBike())
-            .apply("Convert to Json", MapElements.via(new SimpleFunction<KV<String, Integer>, Document>() {
-                public Document apply(KV<String, Integer> input) {
+            .apply("Parse Input", ParDo.of(new ParseEmergencyEventFn()))
+            .apply("Extract Total", new ExtractAndSumEmergency())
+            .apply("Convert to Json", MapElements.via(new SimpleFunction<KV<String, Long>, Document>() {
+                public Document apply(KV<String, Long> input) {
                     return Document.parse("{\"" + input.getKey() + "\": " + input.getValue() + "}");
                 }
             }))
@@ -37,4 +41,11 @@ public class BikeRunner {
             );
         pipeline.run().waitUntilFinish();
     }
+    protected static Map<String, WriteToText.FieldFn<KV<String, Long>>> configureOutput() {
+        Map<String, WriteToText.FieldFn<KV<String, Long>>> config = new HashMap<>();
+        config.put("Date", (c, w) -> c.element().getKey());
+        config.put("Total Calls per Day", (c, w) -> c.element().getValue());
+        return config;
+    }
 }
+

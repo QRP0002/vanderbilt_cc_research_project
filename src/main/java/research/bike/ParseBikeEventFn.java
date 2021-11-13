@@ -13,6 +13,7 @@ public class ParseBikeEventFn extends DoFn<String, Bike> {
     @ProcessElement
     public void processElement(ProcessContext c) {
         String[] components = c.element().split(",", -1);
+
         try {
             String date = parseDate(components[0].trim());
             int total = Integer.parseInt(components[1].trim());
@@ -22,7 +23,7 @@ public class ParseBikeEventFn extends DoFn<String, Bike> {
             Bike bike = new Bike(date, total, eSide, wSide);
             c.output(bike);
 
-        } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+        } catch (ArrayIndexOutOfBoundsException | NumberFormatException | NullPointerException | StringIndexOutOfBoundsException e) {
             parseErrs.inc();
             LOG.info("Parse Error on " + c.element() + ", " + e.getMessage());
         }
