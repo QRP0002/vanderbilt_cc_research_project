@@ -1,4 +1,4 @@
-package research.bike;
+package research.batch.bike;
 
 import org.apache.beam.sdk.metrics.Counter;
 import org.apache.beam.sdk.metrics.Metrics;

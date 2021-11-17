@@ -1,4 +1,4 @@
-package research.bike;
+package research.batch.bike;
 
 import org.apache.beam.sdk.coders.AvroCoder;
 import org.apache.beam.sdk.coders.DefaultCoder;

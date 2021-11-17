@@ -1,4 +1,4 @@
-package research.emergency;
+package research.batch.emergency;
 
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
@@ -6,7 +6,7 @@ import org.apache.beam.sdk.options.PipelineOptions;
 
 public interface EmergencyRunnerOptions extends PipelineOptions {
     @Description("Path to the input file")
-    @Default.String("./src/main/resources/Seattle_Real_Time_Fire_911_Calls.csv")
+    @Default.String("/home/pommerq/flink/Seattle_Real_Time_Fire_911_Calls.csv")
     String getInputFile();
     void setInputFile(String value);
 
@@ -16,7 +16,7 @@ public interface EmergencyRunnerOptions extends PipelineOptions {
     void setOutputFile(String value);
 
     @Description("Mongo Uri")
-    @Default.String("mongodb://spark-main:27017")
+    @Default.String("mongodb://flink-main:27017")
     String getMongoUri();
     void setMongoUri(String value);
 

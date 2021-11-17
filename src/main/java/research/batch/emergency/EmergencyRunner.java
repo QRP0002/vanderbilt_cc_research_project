@@ -1,4 +1,4 @@
-package research.emergency;
+package research.batch.emergency;
 
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
