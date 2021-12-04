@@ -1,28 +1,18 @@
-package research.batch.service;
+package research.entities;
 
 import org.apache.beam.sdk.coders.AvroCoder;
 import org.apache.beam.sdk.coders.DefaultCoder;
 
 @DefaultCoder(AvroCoder.class)
-public class Service {
-    String id;
+public class Emergency {
     String date;
     long count;
 
-    public Service() {}
+    public Emergency() {}
 
-    public Service(String id, String date) {
-        this.id = id;
+    public Emergency(String date) {
         this.date = date;
         this.count = 1;
-    }
-
-    public String getTicket() {
-        return id;
-    }
-
-    public void setTicket(String ticket) {
-        this.id = ticket;
     }
 
     public String getDate() {

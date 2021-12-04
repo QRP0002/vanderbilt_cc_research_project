@@ -33,7 +33,7 @@
         </dependency>
 
 
-        <!-- Spark -->
+        <!-- Spark Start-->
 
 <!--        <dependency> &lt;!&ndash; Spark dependencies &ndash;&gt;-->
 <!--            <groupId>org.apache.spark</groupId>-->
@@ -51,26 +51,26 @@
 <!--            <version>2.2.3</version>-->
 <!--        </dependency>-->
 <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind &ndash;&gt;-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.6.5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.6.5</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.6.5</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-core</artifactId>-->
+<!--            <version>2.6.5</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-databind</artifactId>-->
+<!--            <version>2.6.5</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
+<!--            <artifactId>jackson-annotations</artifactId>-->
+<!--            <version>2.6.5</version>-->
+<!--        </dependency>-->
 
 
-        <!-- Spark -->
+        <!-- Spark End-->
 
         <dependency> <!-- Logs dependencies -->
             <groupId>org.apache.logging.log4j</groupId>
@@ -99,11 +99,22 @@
             <version>4.3.4</version>
         </dependency>
 
-        <dependency><!-- Flink -->
+
+        <!-- Flink Start -->
+        <dependency>
             <groupId>org.apache.beam</groupId>
             <artifactId>beam-runners-flink-1.13</artifactId>
             <version>2.33.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-clients_2.11</artifactId>
+            <version>1.13.3</version>
+        </dependency>
+
+
+        <!-- Flink End -->
+
 
     </dependencies>
 
@@ -113,12 +124,6 @@
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
             </plugin>
 
             <plugin>
@@ -148,7 +153,7 @@
                             <shadedClassifierName>shaded</shadedClassifierName>
                             <transformers>
                                 <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                                    implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                             </transformers>
                         </configuration>
                     </execution>

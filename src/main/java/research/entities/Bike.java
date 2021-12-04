@@ -1,4 +1,4 @@
-package research.batch.bike;
+package research.entities;
 
 import org.apache.beam.sdk.coders.AvroCoder;
 import org.apache.beam.sdk.coders.DefaultCoder;
@@ -7,16 +7,12 @@ import org.apache.beam.sdk.coders.DefaultCoder;
 public class Bike {
     String date;
     int total;
-    int wSide;
-    int eSide;
 
     public Bike() {}
 
-    public Bike(String date, int total, int wSide, int eSide) {
+    public Bike(String date, int total) {
         this.date = date;
         this.total = total;
-        this.wSide = wSide;
-        this.eSide = eSide;
     }
 
     public String getDate() {
@@ -34,21 +30,4 @@ public class Bike {
     public void setTotal(int total) {
         this.total = total;
     }
-
-    public int getWSide() {
-        return this.wSide;
-    }
-
-    public void setWSide(int wSide) {
-        this.wSide = wSide;
-    }
-
-    public int getESide() {
-        return this.eSide;
-    }
-
-    public void setESide(int eSide) {
-        this.eSide = eSide;
-    }
 }
-

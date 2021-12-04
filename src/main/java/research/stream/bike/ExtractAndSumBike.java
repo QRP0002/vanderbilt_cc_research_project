@@ -1,4 +1,4 @@
-package research.batch.bike;
+package research.stream.bike;
 
 import org.apache.beam.sdk.transforms.MapElements;
 import org.apache.beam.sdk.transforms.PTransform;
@@ -6,13 +6,12 @@ import org.apache.beam.sdk.transforms.Sum;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.TypeDescriptors;
-
 import research.entities.Bike;
 
 public class ExtractAndSumBike extends PTransform<PCollection<Bike>, PCollection<KV<String, Integer>>> {
     @Override
     public PCollection<KV<String, Integer>> expand(PCollection<Bike> bike) {
-        System.out.println("Running Extract");
+
         return bike
             .apply(
                 MapElements.into(

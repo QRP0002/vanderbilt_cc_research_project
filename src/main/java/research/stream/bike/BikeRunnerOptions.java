@@ -1,4 +1,4 @@
-package research.batch.bike;
+package research.stream.bike;
 
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
@@ -21,7 +21,7 @@ public interface BikeRunnerOptions extends PipelineOptions {
     void setMongoUri(String value);
 
     @Description("Mongo Database")
-    @Default.String("batch_small")
+    @Default.String("stream_small")
     String getMongoDatabase();
     void setMongoDatabase(String value);
 
@@ -34,4 +34,5 @@ public interface BikeRunnerOptions extends PipelineOptions {
     @Default.String("bikes")
     String getMongoCollection();
     void setMongoCollection(String value);
+
 }

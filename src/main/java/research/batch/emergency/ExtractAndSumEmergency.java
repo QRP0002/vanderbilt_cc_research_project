@@ -7,6 +7,8 @@ import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.TypeDescriptors;
 
+import research.entities.Emergency;
+
 public class ExtractAndSumEmergency extends PTransform<PCollection<Emergency>, PCollection<KV<String, Long>>> {
     @Override
     public PCollection<KV<String, Long>> expand(PCollection<Emergency> emergency) {

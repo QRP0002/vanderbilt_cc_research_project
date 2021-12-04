@@ -1,4 +1,4 @@
-package research.batch.service;
+package research.stream.service;
 
 import org.apache.beam.sdk.transforms.MapElements;
 import org.apache.beam.sdk.transforms.PTransform;
@@ -6,7 +6,6 @@ import org.apache.beam.sdk.transforms.Sum;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.TypeDescriptors;
-
 import research.entities.Service;
 
 public class ExtractAndSumService extends PTransform<PCollection<Service>, PCollection<KV<String, Long>>> {

@@ -16,17 +16,22 @@ public interface EmergencyRunnerOptions extends PipelineOptions {
     void setOutputFile(String value);
 
     @Description("Mongo Uri")
-    @Default.String("mongodb://flink-main:27017")
     String getMongoUri();
     void setMongoUri(String value);
 
     @Description("Mongo Database")
-    @Default.String("spark_medium")
+    @Default.String("batch_medium")
     String getMongoDatabase();
     void setMongoDatabase(String value);
+
+    @Description("Mongo Database")
+    @Default.String("seattle_emergency")
+    String getReadMongoDatabase();
+    void setReadMongoDatabase(String value);
 
     @Description("Mongo Collection")
     @Default.String("emergency")
     String getMongoCollection();
     void setMongoCollection(String value);
+
 }

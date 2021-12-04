@@ -1,18 +1,18 @@
-package research.batch.bike;
+package research.stream.service;
 
 import org.apache.beam.sdk.options.Default;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.sdk.options.PipelineOptions;
 
-public interface BikeRunnerOptions extends PipelineOptions {
+public interface ServiceRunnerOptions extends PipelineOptions {
 
     @Description("Path to the input file")
-    @Default.String("/home/pommerq/flink/Fremont_Bridge_Bicycle_Counter.csv")
+    @Default.String("/home/pommerq/flink/311_Service_Requests_from_2010_to_Present.csv")
     String getInputFile();
     void setInputFile(String value);
 
     @Description("Path of the file to write to.")
-    @Default.String("./src/main/resources/output-bike.txt")
+    @Default.String("./src/main/resources/output-service.txt")
     String getOutput();
     void setOutput(String value);
 
@@ -21,17 +21,17 @@ public interface BikeRunnerOptions extends PipelineOptions {
     void setMongoUri(String value);
 
     @Description("Mongo Database")
-    @Default.String("batch_small")
+    @Default.String("stream_large")
     String getMongoDatabase();
     void setMongoDatabase(String value);
 
     @Description("Mongo Database")
-    @Default.String("seattle_bike")
+    @Default.String("new_york_311")
     String getReadMongoDatabase();
     void setReadMongoDatabase(String value);
 
     @Description("Mongo Collection")
-    @Default.String("bikes")
+    @Default.String("service")
     String getMongoCollection();
     void setMongoCollection(String value);
 }

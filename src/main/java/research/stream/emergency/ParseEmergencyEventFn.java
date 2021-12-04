@@ -1,4 +1,4 @@
-package research.batch.emergency;
+package research.stream.emergency;
 
 import org.apache.beam.sdk.metrics.Counter;
 import org.apache.beam.sdk.metrics.Metrics;
@@ -7,11 +7,10 @@ import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import research.batch.bike.ParseBikeEventFn;
-
-import research.entities.Bike;
 import research.entities.Emergency;
 
-public class ParseEmergencyEventFn extends DoFn<Document, Emergency> {
+
+public class ParseEmergencyEventFn extends DoFn<String, Emergency> {
     private static final Logger LOG = LoggerFactory.getLogger(ParseBikeEventFn.class);
     private final Counter parseErrs = Metrics.counter("main", "ParseErrors");
 
@@ -20,8 +19,8 @@ public class ParseEmergencyEventFn extends DoFn<Document, Emergency> {
         String dateStr = "Datetime";
 
         try {
-            String date = parseDate(c.element().get(dateStr).toString());
-            Emergency emergency = new Emergency(date);
+            //String date = parseDate(c.element().get(dateStr).toString());
+            Emergency emergency = new Emergency("date");
             c.output(emergency);
         } catch (ArrayIndexOutOfBoundsException | NumberFormatException | NullPointerException | StringIndexOutOfBoundsException e) {
             parseErrs.inc();
