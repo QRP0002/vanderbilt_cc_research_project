@@ -1,0 +1,23 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spark-driver-service
+spec:
+  type: ClusterIP   # published inside the cluster (default service mode)
+  selector:
+    app: sparkDriverApp
+  ports:
+    - name: spark-driver-port
+      protocol: TCP
+      port: 7076
+      targetPort: 7076
+    - name: spark-blkmgr-port
+      protocol: TCP
+      port: 7079
+      targetPort: 7079
+    - name: spark-driver-gui
+      protocol: TCP
+      port: 4040 
+      targetPort: 4040
+...
