@@ -1,0 +1,8 @@
+apiVersion: v1
+stringData:
+  password: password 
+  username: lessley
+kind: Secret
+type: Opaque
+metadata:
+  name: mongo-creds
