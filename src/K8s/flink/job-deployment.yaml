@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-job-deploy  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flinkJobApp
+  minReadySeconds: 5
+
+  template:
+    metadata:
+      labels:
+        app: flinkJobApp
+    spec:
+      hostname: flink-job-host
+      nodeSelector:
+        kubernetes.io/hostname: kubernetes-main
+      containers:
+        - name: flink-job
+          image: 3.216.80.117:5000/flink:latest
+          imagePullPolicy: Always
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+...
