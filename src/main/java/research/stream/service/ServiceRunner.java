@@ -38,7 +38,7 @@ public class ServiceRunner {
                 .as(WindowingOptions.class);
 
         System.out.println("Mongodb: " + args[0]);
-        String uri = "mongodb://" + args[0].replace(",", "").trim() + ":27017";
+        String uri = "mongodb://lessley:password@" + args[0].replace(",", "").trim() + ":30001";
         options.setMongoUri(uri);
         runRunner(options, windowOptions);
     }
@@ -50,20 +50,12 @@ public class ServiceRunner {
         Pipeline pipeline = Pipeline.create(options);
 
        pipeline
-//            .apply(MongoDbIO.read()
-//                    .withUri(options.getMongoUri())
-//                    .withDatabase(options.getReadMongoDatabase())
-//                    .withCollection(options.getMongoCollection()))
-        .apply("Read Input DB", TextIO.read().from(options.getInputFile()))
+            .apply(MongoDbIO.read()
+                    .withUri(options.getMongoUri())
+                    .withDatabase(options.getReadMongoDatabase())
+                    .withCollection(options.getMongoCollection()))
             .apply("Add Timestamp for bounded data", ParDo.of(new AddTimestampFn(minTimestamp, maxTimestamp)))
-            .apply("Window", Window.<String>into(new GlobalWindows())
-                .triggering(Repeatedly
-                    .forever(AfterProcessingTime
-                        .pastFirstElementInPane()
-                        .plusDelayOf(Duration.standardMinutes(60))
-                    )
-                )
-                .withAllowedLateness(Duration.ZERO).discardingFiredPanes())
+            .apply(Window.into(FixedWindows.of(Duration.standardMinutes(windowOptions.getWindowSize()))))
             .apply("Parse Input", ParDo.of(new ParseServiceEventFn()))
             .apply("Extract Total", new ExtractAndSumService())
             .apply("Convert to Json", MapElements.via(new SimpleFunction<KV<String, Long>, Document>() {
@@ -77,8 +69,6 @@ public class ServiceRunner {
                     .withDatabase(options.getMongoDatabase())
                     .withCollection(options.getMongoCollection())
             );
-            //.apply("Read Input File", TextIO.read().from(options.getInputFile()))
-            //.apply("WriteUserScoreSums", new WriteToText<>(options.getOutput(), configureOutput(), false));
         pipeline.run().waitUntilFinish();
     }
     protected static Map<String, WriteToText.FieldFn<KV<String, Long>>> configureOutput() {
@@ -88,3 +78,12 @@ public class ServiceRunner {
         return config;
     }
 }
+
+           // .apply("Window", Window.<String>into(new GlobalWindows())
+//                .triggering(Repeatedly
+//                    .forever(AfterProcessingTime
+//                        .pastFirstElementInPane()
+//                        .plusDelayOf(Duration.standardMinutes(60))
+//                    )
+//                )
+//                .withAllowedLateness(Duration.ZERO).discardingFiredPanes())

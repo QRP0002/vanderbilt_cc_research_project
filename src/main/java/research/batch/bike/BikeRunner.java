@@ -28,7 +28,7 @@ public class BikeRunner {
             .as(BikeRunnerOptions.class);
 
         System.out.println("Mongodb: " + args[0]);
-        String uri = "mongodb://" + args[0].replace(",", "").trim() + ":27017";
+        String uri = "mongodb://lessley:password@" + args[0].replace(",", "").trim() + ":30001";
         options.setMongoUri(uri);
 
         runRunner(options);

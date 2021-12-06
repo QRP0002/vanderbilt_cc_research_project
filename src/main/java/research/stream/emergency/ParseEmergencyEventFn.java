@@ -16,11 +16,12 @@ public class ParseEmergencyEventFn extends DoFn<String, Emergency> {
 
     @ProcessElement
     public void processElement(ProcessContext c) throws NullPointerException {
-        String dateStr = "Datetime";
+        String[] components = c.element().split(",", -1);
 
         try {
-            //String date = parseDate(c.element().get(dateStr).toString());
-            Emergency emergency = new Emergency("date");
+            String date = parseDate(components[1].trim());
+            Emergency emergency = new Emergency(date);
+
             c.output(emergency);
         } catch (ArrayIndexOutOfBoundsException | NumberFormatException | NullPointerException | StringIndexOutOfBoundsException e) {
             parseErrs.inc();
@@ -29,15 +30,7 @@ public class ParseEmergencyEventFn extends DoFn<String, Emergency> {
     }
 
     private String parseDate(String date) throws StringIndexOutOfBoundsException {
-        return date.substring(0, 10);
-    }
-
-    private String cleanUpData(String check) {
-        return check
-            .replace("Hang-Up,", "Hang Up")
-            .replace("Mutual Aid,", "Mutual Aid")
-            .replace("Assault w/Weapons,", "Assault w/Weapons")
-            .replace("Natur Gas Outside,", "Natur Gas Outside")
-            .replace("Rescue,", "Rescue");
+        String[] components = date.split("=", -1);
+        return components[1].substring(0, 10).trim();
     }
 }

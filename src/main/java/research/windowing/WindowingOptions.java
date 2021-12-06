@@ -5,7 +5,7 @@ import org.apache.beam.sdk.options.Description;
 
 public interface WindowingOptions extends TimeOptions {
     @Description("Fixed window duration, in minutes")
-    @Default.Integer(60)
+    @Default.Integer(30)
     Integer getWindowSize();
     void setWindowSize(Integer value);
 

@@ -6,7 +6,7 @@ import org.joda.time.Instant;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class AddTimestampFn extends DoFn<String, String> {
+public class AddTimestampFn extends DoFn<Document, String> {
     private final Instant minTimestamp;
     private final Instant maxTimestamp;
 
@@ -16,12 +16,11 @@ public class AddTimestampFn extends DoFn<String, String> {
     }
 
     @ProcessElement
-    public void processElement(@Element String element, OutputReceiver<String> receiver) {
+    public void processElement(@Element Document element, OutputReceiver<String> receiver) {
         Instant randomTimestamp =
-                new Instant(
-                        ThreadLocalRandom.current()
-                                .nextLong(minTimestamp.getMillis(), maxTimestamp.getMillis()));
-        System.out.println("WE are random" + randomTimestamp);
-        receiver.outputWithTimestamp(element, randomTimestamp);
+            new Instant(
+                ThreadLocalRandom.current()
+                    .nextLong(minTimestamp.getMillis(), maxTimestamp.getMillis()));
+        receiver.outputWithTimestamp(element.toString(), randomTimestamp);
     }
 }

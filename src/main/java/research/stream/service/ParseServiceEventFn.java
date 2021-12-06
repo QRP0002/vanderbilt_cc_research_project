@@ -14,13 +14,13 @@ public class ParseServiceEventFn extends DoFn<String, Service> {
 
     @ProcessElement
     public void processElement(ProcessContext c) throws NullPointerException {
-        String keyStr = "Unique Key";
-        String dateStr = "Created Date";
-
+        String[] components = c.element().split(",", -1);
+        System.out.println(" COMPONENTS " +  components[1] +  "     " + components[2]);
         try {
-//            String id = c.element().get(keyStr).toString().trim();
-//            String date = parseDate(c.element().get(dateStr).toString().trim());
-            Service service = new Service(" 56", "date");
+            String id = parseId(components[1].trim());
+            String date = parseDate(components[2].trim());
+
+            Service service = new Service(id, date);
             c.output(service);
         } catch (ArrayIndexOutOfBoundsException | NumberFormatException | NullPointerException | StringIndexOutOfBoundsException e) {
             parseErrs.inc();
@@ -29,7 +29,13 @@ public class ParseServiceEventFn extends DoFn<String, Service> {
     }
 
     private String parseDate(String date) throws StringIndexOutOfBoundsException {
-        return date.substring(0, 10);
+        String[] components = date.split("=", -1);
+        return components[1].replace("}}", "").substring(0, 10).trim();
+    }
+
+    private String parseId(String id) {
+        String[] components = id.split("=", -1);
+        return components[1].trim();
     }
 }
 

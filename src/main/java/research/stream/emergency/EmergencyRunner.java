@@ -37,7 +37,7 @@ public class EmergencyRunner {
                 .as(WindowingOptions.class);
 
         System.out.println("Mongodb: " + args[0]);
-        String uri = "mongodb://" + args[0].replace(",", "").trim() + ":27017";
+        String uri = "mongodb://lessley:password@" + args[0].replace(",", "").trim() + ":30001";
         options.setMongoUri(uri);
         runRunner(options, windowOptions);
     }
@@ -49,20 +49,12 @@ public class EmergencyRunner {
         Pipeline pipeline = Pipeline.create(options);
 
         pipeline
-                .apply("Read Input DB", TextIO.read().from(options.getInputFile()))
-//            .apply(MongoDbIO.read()
-//                    .withUri(options.getMongoUri())
-//                    .withDatabase(options.getReadMongoDatabase())
-//                    .withCollection(options.getMongoCollection()))
+            .apply(MongoDbIO.read()
+                    .withUri(options.getMongoUri())
+                    .withDatabase(options.getReadMongoDatabase())
+                    .withCollection(options.getMongoCollection()))
             .apply("Add Timestamp for bounded data", ParDo.of(new AddTimestampFn(minTimestamp, maxTimestamp)))
-            .apply("Window", Window.<String>into(new GlobalWindows())
-                .triggering(Repeatedly
-                    .forever(AfterProcessingTime
-                        .pastFirstElementInPane()
-                        .plusDelayOf(Duration.standardMinutes(60))
-                    )
-                )
-                .withAllowedLateness(Duration.ZERO).discardingFiredPanes())
+            .apply(Window.into(FixedWindows.of(Duration.standardMinutes(windowOptions.getWindowSize()))))
             .apply("Parse Input", ParDo.of(new ParseEmergencyEventFn()))
             .apply("Extract Total", new ExtractAndSumEmergency())
             .apply("Convert to Json", MapElements.via(new SimpleFunction<KV<String, Long>, Document>() {

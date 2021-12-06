@@ -26,7 +26,7 @@ public interface ServiceRunnerOptions extends PipelineOptions {
     void setMongoDatabase(String value);
 
     @Description("Mongo Database")
-    @Default.String("new_york_311")
+    @Default.String("nyc_311")
     String getReadMongoDatabase();
     void setReadMongoDatabase(String value);
 

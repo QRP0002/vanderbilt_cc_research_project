@@ -9,16 +9,32 @@ import org.slf4j.Logger;
 
 import research.entities.Bike;
 
+import javax.print.Doc;
+
 public class ParseBikeEventFn extends DoFn<Document, Bike> {
     private static final Logger LOG = LoggerFactory.getLogger(ParseBikeEventFn.class);
     private final Counter parseErrs = Metrics.counter("main", "ParseErrors");
 
     @ProcessElement
     public void processElement(ProcessContext c) {
+//            String[] components = c.element().split(",", -1);
+//
+//        try {
+//                String date = parseDate(components[0].trim());
+//                int total = Integer.parseInt(components[1].trim());
+//
+//                Bike service = new Bike(date, total);
+//                c.output(service);
+//
+//                } catch (ArrayIndexOutOfBoundsException | NumberFormatException | NullPointerException | StringIndexOutOfBoundsException e) {
+//                parseErrs.inc();
+//                LOG.info("Parse Error on " + c.element() + ", " + e.getMessage());
+//                }
         String dateStr = "Date";
         String totalStr = "Fremont Bridge Total";
 
         try {
+
             String date = parseDate(c.element().get(dateStr).toString());
             int total = Integer.parseInt(c.element().get(totalStr).toString().trim());
 

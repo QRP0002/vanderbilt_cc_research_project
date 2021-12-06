@@ -7,7 +7,7 @@ import org.apache.beam.sdk.options.PipelineOptions;
 public interface BikeRunnerOptions extends PipelineOptions {
 
     @Description("Path to the input file")
-    @Default.String("/home/pommerq/flink/Fremont_Bridge_Bicycle_Counter.csv")
+    @Default.String("/home/ubuntu/bikes.csv")
     String getInputFile();
     void setInputFile(String value);
 

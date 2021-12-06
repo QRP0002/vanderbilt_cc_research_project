@@ -36,50 +36,42 @@ public class BikeRunner {
             .as(WindowingOptions.class);
 
         System.out.println("Mongodb: " + args[0]);
-        String uri = "mongodb://" + args[0].replace(",", "").trim() + ":27017";
+        String uri = "mongodb://lessley:password@" + args[0].replace(",", "").trim() + ":30001";
         options.setMongoUri(uri);
         runRunner(options, windowOptions);
     }
 
-    static void runRunner(BikeRunnerOptions bikeOptions, WindowingOptions windowOptions) {
+    static void runRunner(BikeRunnerOptions options, WindowingOptions windowOptions) {
         final Instant minTimestamp = new Instant(windowOptions.getMinTimestampMillis());
         final Instant maxTimestamp = new Instant(windowOptions.getMaxTimestampMillis());
 
-        Pipeline pipeline = Pipeline.create(bikeOptions);
+        Pipeline pipeline = Pipeline.create(options);
         try {
             pipeline
-                    .apply("Read Input DB", TextIO.read().from(bikeOptions.getInputFile()))
-//                    .apply(MongoDbIO.read()
-//                            .withUri(bikeOptions.getMongoUri())
-//                            .withDatabase(bikeOptions.getReadMongoDatabase())
-//                            .withCollection(bikeOptions.getMongoCollection()))
-//                    .apply("Add Timestamp for bounded data", ParDo.of(new AddTimestampFn(minTimestamp, maxTimestamp)))
-                    .apply("Window", Window.<String>into(new GlobalWindows())
-                        .triggering(Repeatedly
-                            .forever(AfterProcessingTime
-                                .pastFirstElementInPane()
-                                .plusDelayOf(Duration.standardMinutes(60))
-                            )
-                        )
-                        .withAllowedLateness(Duration.ZERO).discardingFiredPanes())
-                    .apply("Parse Input", ParDo.of(new ParseBikeEventFn()))
-                    .apply("Extract Total Crossing", new ExtractAndSumBike())
-                        .apply("Convert to Json", MapElements.via(new SimpleFunction<KV<String, Integer>, Document>() {
-                            public Document apply(KV<String, Integer> input) {
-                                return Document.parse("{\"" + input.getKey() + "\": " + input.getValue() + "}");
-                            }
-                        }))
-                        .apply("Write To Mongo",
-                                MongoDbIO.write()
-                                        .withUri(bikeOptions.getMongoUri())
-                                        .withDatabase(bikeOptions.getMongoDatabase())
-                                        .withCollection(bikeOptions.getMongoCollection())
-                        );
-                    //.apply("WriteUserScoreSums", new WriteToText<>(bikeOptions.getOutput(), configureOutput(), false));
+                .apply(MongoDbIO.read()
+                    .withUri(options.getMongoUri())
+                    .withDatabase(options.getReadMongoDatabase())
+                    .withCollection(options.getMongoCollection()))
+                .apply("Add Timestamp for bounded data", ParDo.of(new AddTimestampFn(minTimestamp, maxTimestamp)))
+                .apply(Window.into(FixedWindows.of(Duration.standardMinutes(windowOptions.getWindowSize()))))
+                .apply("Parse Input", ParDo.of(new ParseBikeEventFn()))
+                .apply("Extract Total Crossing", new ExtractAndSumBike())
+                    .apply("Convert to Json", MapElements.via(new SimpleFunction<KV<String, Integer>, Document>() {
+                        public Document apply(KV<String, Integer> input) {
+                            return Document.parse("{\"" + input.getKey() + "\": " + input.getValue() + "}");
+                        }
+                    }))
+                    .apply("Write To Mongo",
+                        MongoDbIO.write()
+                            .withUri(options.getMongoUri())
+                            .withDatabase(options.getMongoDatabase())
+                            .withCollection(options.getMongoCollection())
+                    );
+//                    .apply("WriteUserScoreSums", new WriteToText<>(options.getOutput(), configureOutput(), false));
         } catch (Exception e) {
             System.out.println("LOG: This is an issue " + e);
         }
-        System.out.println(bikeOptions.getMongoUri());
+        System.out.println(options.getMongoUri());
         pipeline.run().waitUntilFinish();
     }
 
@@ -90,3 +82,5 @@ public class BikeRunner {
         return config;
     }
 }
+
+//.apply("Read Input DB", TextIO.read().from(bikeOptions.getInputFile()))
