@@ -26,7 +26,7 @@ spec:
             - name: SPARK_LOCAL_IP
               value: "spark-driver-host"
             - name: SPARK_HOME  
-              value: "/spark-3.1.2-bin-hadoop3.2"
+              value: "/spark-3.2.0-bin-hadoop3.2"
 
           ports:            
             - containerPort: 4040  
