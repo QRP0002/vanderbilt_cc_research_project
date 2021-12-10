@@ -5,7 +5,7 @@ metadata:
 spec:
   type: NodePort
   externalIPs:
-        - 18.206.87.122
+        - 35.175.111.31
   ports:
   - name: webui
     protocol: TCP

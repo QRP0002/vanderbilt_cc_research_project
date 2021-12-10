@@ -20,7 +20,7 @@ spec:
         kubernetes.io/hostname: kubernetes-main
       containers:
         - name: spark-driver       
-          image: 18.206.87.122:5000/spark:latest   
+          image: 35.175.111.31:5000/spark:latest   
           imagePullPolicy: Always  
           env:
             - name: SPARK_LOCAL_IP
