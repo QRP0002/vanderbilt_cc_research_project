@@ -20,7 +20,7 @@ spec:
         kubernetes.io/hostname: kubernetes-main
       containers:
         - name: flink-job
-          image: 3.216.80.117:5000/flink:latest
+          image: 44.198.190.177:5000/flink:latest
           imagePullPolicy: Always
           command: ["tail"]
           args: ["-f", "/dev/null"]
