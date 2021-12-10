@@ -17,6 +17,8 @@ spec:
       labels:
         app: mongo
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: kubernetes-main      
       containers:
       - image: mongo
         name: mongo
