@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  type: NodePort
+  externalIPs:
+        - 35.175.111.31
+  selector:
+    app: mongo
+  ports:
+  - protocol: TCP
+    port: 27017
+    protocol: TCP
+    nodePort: 30001
