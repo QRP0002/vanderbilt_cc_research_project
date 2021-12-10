@@ -3,6 +3,7 @@ FROM ubuntu:latest
 RUN apt-get -y update && apt-get install -y default-jdk
 RUN apt-get -y update && apt-get install -y net-tools wget dnsutils iputils-ping iputils-tracepath iputils-arping iputils-clockdiff vim
 RUN apt install -y maven
+RUN apt-get install -y time
 
 RUN wget https://dlcdn.apache.org/flink/flink-1.14.0/flink-1.14.0-bin-scala_2.12.tgz
 RUN tar -xzf flink-1.14.0-bin-scala_2.12.tgz
