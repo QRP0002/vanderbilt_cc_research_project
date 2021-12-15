@@ -1,0 +1,16 @@
+FROM ubuntu:latest
+
+RUN apt-get -y update && apt-get install -y default-jdk
+RUN apt-get -y update && apt-get install -y net-tools wget dnsutils iputils-ping iputils-tracepath iputils-arping iputils-clockdiff vim
+RUN apt-get install -y time
+
+RUN wget https://apache.osuosl.org/spark/spark-3.2.0/spark-3.2.0-bin-hadoop3.2.tgz
+RUN zcat spark-3.2.0-bin-hadoop3.2.tgz | tar xpof -
+
+COPY spark-env.sh /spark-3.2.0-bin-hadoop3.2/conf/
+COPY spark-worker.conf /spark-3.2.0-bin-hadoop3.2/conf/
+COPY spark-driver.conf /spark-3.2.0-bin-hadoop3.2/conf/
+ADD spark_runner /spark-3.2.0-bin-hadoop3.2
+
+ENV SPARK_HOME=/spark-3.2.0-bin-hadoop3.2
+ENV PATH=${PATH}:${SPARK_HOME}/sbin:${SPARK_HOME}/bin

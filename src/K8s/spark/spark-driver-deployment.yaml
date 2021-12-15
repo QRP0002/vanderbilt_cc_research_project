@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-driver-deploy  # This will run the Spark driver
+spec:                     
+  replicas: 1            
+  selector:
+    matchLabels:
+      app: sparkDriverApp   
+  minReadySeconds: 5  
+                          
+  template:              
+    metadata:
+      labels:
+        app: sparkDriverApp   
+    spec:                 
+      hostname: spark-driver-host
+      nodeSelector:
+        kubernetes.io/hostname: kubernetes-main
+      containers:
+        - name: spark-driver       
+          image: 35.175.111.31:5000/spark:latest   
+          imagePullPolicy: Always  
+          env:
+            - name: SPARK_LOCAL_IP
+              value: "spark-driver-host"
+            - name: SPARK_HOME  
+              value: "/spark-3.2.0-bin-hadoop3.2"
+
+          ports:            
+            - containerPort: 4040  
+            - containerPort: 7076  
+            - containerPort: 7079 
+
+          command: ["tail"]
+          args: ["-f", "/dev/null"]
+...
